@@ -1,4 +1,10 @@
+const jwt = require('jwt-simple');
+const config = require('../config');
 const User = require('../models/user');
+
+function tokenForUser(user) {
+  return jwt.encode({ sub: user.id }, config.secret);
+}
 
 exports.signup = function(req, res, next) {
   const email = req.body.email;
