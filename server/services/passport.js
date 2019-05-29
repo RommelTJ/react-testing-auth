@@ -32,8 +32,15 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 // Create Local Strategy
 
 const localLogin = new LocalStrategy({usernameField: 'email'}, function(email, password, done) {
-  // Verify this username and password, call done with the user if it is the correct username and passport.
+  // Verify this email and password, call done with the user if it is the correct email and passport.
   // Otherwise, call done with false.
+  User.findOne({ email: email }, function(err, user) {
+    if (err) { return done(err); }
+    if (!user) { return done(null, false); }
+
+    // Compare passwords - is `password` equal to user.password?
+    done(null, user);
+  });
 });
 
 // Tell passport to use this strategy
